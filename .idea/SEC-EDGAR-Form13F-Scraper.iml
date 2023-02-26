@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/abstracts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/cli" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/data" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/db" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/downloaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/http_modules" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/index_sources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/tables" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/xml" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

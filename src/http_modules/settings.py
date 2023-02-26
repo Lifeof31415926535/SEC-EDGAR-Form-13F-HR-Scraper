@@ -1,0 +1,3 @@
+""""""
+DEFAULT_USER_AGENT = ""
+DEFAULT_TIMEOUT = 2
