@@ -1,7 +1,7 @@
 from unittest import TestCase
 from tests.data.index_reader_data import INDEX_DATA
 
-from src.index_sources.index_readers import FormIndexReader
+from src.index_sources.forms_index_files import FormsIndexReader
 from src.data.index_data import FormIndexData
 
 
@@ -32,5 +32,5 @@ class TestIndexFormIndexReader(TestCase):
         ]
 
     def test_read(self):
-        reader = FormIndexReader()
+        reader = FormsIndexReader()
         self.assertEqual(self.valid_result, reader.read(INDEX_DATA))
