@@ -11,7 +11,3 @@ class Downloader(ABC):
     def download(self, request: Request, max_retries) -> Response:
         pass
 
-
-
-
-
