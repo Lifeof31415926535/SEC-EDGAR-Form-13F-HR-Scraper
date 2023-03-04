@@ -23,7 +23,7 @@ class HttpxDownloader(Downloader):
                     errors.append({'HTTP Error': http_err})
                     continue
 
-                if r.status_code == 200:
+                if r.status_code < 300:
                     return Response(
                         url=request.url,
                         status=200,
@@ -32,6 +32,8 @@ class HttpxDownloader(Downloader):
                         data=r.text
                     )
                 retries += 1
+
+        errors.append({f"Status {r.status_code}": f"Failed to download {request.url}."})
 
         return Response(
             url=request.url,
