@@ -31,12 +31,12 @@ class FilingDate(ABC):
     @property
     def date_str(self):
         month_str = f"0{self.month}" if self.month < 10 else f"{self.month}"
-        day_str = f"0{self.day}" if self.month < 10 else f"{self.month}"
+        day_str = f"0{self.day}" if self.day < 10 else f"{self.day}"
         return f"{self.year}{month_str}{day_str}"
 
     @property
     def quarter_str(self):
-        return f"QRT{self.quarter}"
+        return f"QTR{self.quarter}"
 
     @property
     def is_valid(self):
@@ -65,7 +65,7 @@ class QuarterFilingDate(FilingDate):
                 year=y,
                 quarter=q,
                 boundary=bs
-            ) if q in range(1, 5) and BoundaryState in [BoundaryState.START, BoundaryState.END]:
+            ) if q in range(1, 5) and bs in [BoundaryState.START, BoundaryState.END]:
                 resolver = QuarterToDateResolver(year=y, quarter=q)
                 self.month, self.day = resolver.first_date() if bs == BoundaryState.START else resolver.last_date()
             case _:
@@ -127,13 +127,15 @@ class FilingQuarter(FilingPeriod):
                 'Type Error': 'Invalid filing date object passed.'
             })
 
+        self._build_date_list()
+
     def _build_date_list(self):
         assert self.start.quarter == self.end.quarter and self.start.year == self.end.year
 
         year = self.start.year
         quarter = self.start.quarter
 
-        resolver = QuarterToDateResolver(year=self.start.year, quarter=self.end.year)
+        resolver = QuarterToDateResolver(year=self.start.year, quarter=self.start.quarter)
         first_month, first_day = resolver.first_date()
         last_month, last_day = resolver.last_date()
 
@@ -153,6 +155,13 @@ class FilingQuarter(FilingPeriod):
             self.dates.append(date)
 
         self.dates.append(self.end)
+
+
+def filing_quarter(year: int, quarter: int):
+    return FilingQuarter(
+        start=QuarterFilingDate(year=year, quarter=quarter, boundary=BoundaryState.START),
+        end=QuarterFilingDate(year=year, quarter=quarter, boundary=BoundaryState.END)
+    )
 
 
 @dataclass
