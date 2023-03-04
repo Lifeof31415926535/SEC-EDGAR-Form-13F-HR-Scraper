@@ -130,7 +130,7 @@ class DayOfMonthResolver:
             start = 1
         if end is None:
             end = self.days_in_month
-        if start or end not in range(1, self.days_in_month + 1):
+        if start not in range(1, self.days_in_month + 1) or end not in range(1, self.days_in_month + 1):
             raise DateError("Invalid date range.")
         if start > end:
             raise DateError("The end date must be greater than the start date.")
