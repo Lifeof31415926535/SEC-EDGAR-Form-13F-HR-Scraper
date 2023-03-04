@@ -1,46 +1,41 @@
 from abstracts import *
-from periods import FilingPeriod
+from periods import FilingPeriod, filing_quarter
 from typing import Tuple
 
-from config import INDEX_URL, DEFAULT_BATCH_SIZE, FILINGS_URL
-from http_modules.requests import Header, Request
+from config import INDEX_URL, DEFAULT_BATCH_SIZE, FILINGS_URL, INDEX_SCRAPER_CONFIG
+from index_sources import IndexFileManagerFactory
 
 
 class IndexScraper:
     def __init__(
             self,
             period: FilingPeriod,
-            downloader: Downloader,
-            index_reader: IndexFileReader,
-            index_writer: IndexWriter,
+            manager_config: dict = INDEX_SCRAPER_CONFIG
     ):
         self.period = period
-        self.downloader = downloader
-        self.index_reader = index_reader
-        self.index_writer = index_writer
+        index_file_manager_factory = IndexFileManagerFactory()
+        self.manager = index_file_manager_factory(**manager_config)
 
     def start(self):
         self._controller()
+        self._print_stats()
 
     def _controller(self):
-        header = Header()
-        index_type = self.index_reader.index_type
+        index_type = self.manager.index_type
         for date in self.period.dates:
             url = f"{INDEX_URL}{date.year}/{date.quarter_str}/{index_type}.{date.date_str}.idx"
-            request = Request(
-                header=header,
-                url=url
-            )
+            self.manager.run(url)
 
-            response = self.downloader.download(request, max_retries=3)
-
-            if response.status != 200:
-                continue
-
-            sources = self.index_reader.read(response.data)
-            self.index_writer.write(sources)
+    def _print_stats(self):
+        print(f"Successful: {self.manager.successful}")
+        print(f"Failed: {self.manager.failed}")
+        if self.manager.errors:
+            print('Dumping errors.')
+            for error in self.manager.errors:
+                print(error)
 
 
+"""
 class TableScraper:
     def __init__(
             self,
@@ -73,4 +68,10 @@ class TableScraper:
 
                 filing = self.table_reader.read(response.data)
                 self.writer.write(filing)
+"""
+
+if __name__ == '__main__':
+    filing_period = filing_quarter(2022, 1)
+    index_scraper = IndexScraper(period=filing_period)
+    index_scraper.start()
 
