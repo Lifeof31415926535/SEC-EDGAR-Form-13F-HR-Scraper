@@ -1,3 +1,6 @@
+# Index Scraper
+INDEX_SCRAPER_CONFIG = {}
+
 # Table Scraper
 DEFAULT_BATCH_SIZE = 20
 
@@ -17,5 +20,4 @@ DB_CONFIG = {
     'host': 'localhost',
     'port': '5432',
 }
-
 
