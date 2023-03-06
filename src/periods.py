@@ -28,11 +28,25 @@ class FilingDate(ABC):
                 {'Range Error': 'The given year is earlier than the minimum year for the requested form type.'}
             )
 
-    @property
-    def date_str(self):
+    @classmethod
+    def from_str(cls, date_str: str, boundary=BoundaryState.MIDDLE) -> object:
+        if len(date_str) != 8:
+            raise Exception('')
+        year = int(date_str[0:4])
+        month = int(date_str[4:6])
+        day = int(date_str[6:8])
+        quarter = MonthToQuarterResolver(month=month).quarter
+
+        return cls(year=year, month=month, day=day, quarter=quarter, boundary=boundary)
+
+    def date_str_formatted(self, sep=''):
         month_str = f"0{self.month}" if self.month < 10 else f"{self.month}"
         day_str = f"0{self.day}" if self.day < 10 else f"{self.day}"
-        return f"{self.year}{month_str}{day_str}"
+        return sep.join([str(self.year), month_str, day_str])
+
+    @property
+    def date_str(self):
+        return self.date_str_formatted()
 
     @property
     def quarter_str(self):
@@ -41,6 +55,11 @@ class FilingDate(ABC):
     @property
     def is_valid(self):
         return not self.errors
+
+
+@dataclass
+class GenericFilingDate(FilingDate):
+    pass
 
 
 @dataclass
