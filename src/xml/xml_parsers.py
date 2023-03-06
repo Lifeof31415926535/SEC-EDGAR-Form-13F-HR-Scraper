@@ -1,6 +1,6 @@
 from lxml import etree
 
-from .xml_errors import EmptyEntryError, NilEntryError
+from src.xml.xml_errors import EmptyEntryError, NilEntryError
 
 
 def _parse_tree(parent, parent_dict: dict) -> dict:
@@ -32,9 +32,8 @@ def _parse_tree(parent, parent_dict: dict) -> dict:
             parent_dict.update({tag: children_dict})
 
 
-def _parse_xml(path: str, remove_comments=True) -> dict:
-    tree = etree.parse(path, parser=etree.XMLParser(remove_comments=remove_comments))
-    root = tree.getroot()
+def parse_xml(path: str, remove_comments=True) -> dict:
+    root = etree.fromstring(path, parser=etree.XMLParser(remove_comments=remove_comments))
 
     xml_dict = {}
     _parse_tree(root, xml_dict)
