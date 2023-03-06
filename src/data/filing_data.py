@@ -16,27 +16,31 @@ class VotingAuthority:
 
 @dataclass
 class PrimaryTableData:
-    filing_id: str
-    cik: str
-    company_name: str
-    period_of_report: str
-    table_entry_total: int
+    cik: str = field(default=None)
+    company_name: str = field(default=None)
+    period_of_report: str = field(default=None)
+    table_entry_total: int = field(default=None)
+    table_value_total: int = field(default=None)
+    errors: list[dict] = field(default_factory=list, init=False)
 
 
 @dataclass
 class InfoTableData:
-    name_of_issuer: str
-    title_of_class: str
-    cusip: str
-    value: int
-    shrs_or_prn_amt: ShrsOrPrnAmt
-    investment_discretion: str
-    voting_authority: VotingAuthority
+    name_of_issuer: str = field(default=None)
+    title_of_class: str = field(default=None)
+    cusip: str = field(default=None)
+    value: int = field(default=None)
+    shrs_or_prn_amt: ShrsOrPrnAmt = field(default=None)
+    investment_discretion: str = field(default=None)
+    voting_authority: VotingAuthority = field(default=None)
     put_call: str = field(default=None)
+    errors: list[dict] = field(default_factory=list, init=False)
 
 
 @dataclass
 class FilingData:
-    header: PrimaryTableData
-    info: list[InfoTableData]
-    filing_total: int
+    filing_id: str = field(default=None)
+    header: PrimaryTableData = field(default=None)
+    info: list[InfoTableData] = field(default=None)
+    filing_total: int = field(default=None)
+    filing_errors: list[dict] = field(default_factory=list)
