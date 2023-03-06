@@ -4,6 +4,7 @@ from typing import Tuple
 
 from config import INDEX_URL, DEFAULT_BATCH_SIZE, FILINGS_URL, INDEX_SCRAPER_CONFIG
 from index_sources import IndexFileManagerFactory
+from tables import TableManagerFactory
 
 
 class IndexScraper:
@@ -35,43 +36,18 @@ class IndexScraper:
                 print(error)
 
 
-"""
 class TableScraper:
-    def __init__(
-            self,
-            downloader: Downloader,
-            source_reader: SourceReader,
-            table_reader: TableReader,
-            writer: TableWriter,
-    ):
-        self.downloader = downloader
-        self.source_reader = source_reader
-        self.table_reader = table_reader
-        self.writer = writer
+    def __init__(self, manager_factory=TableManagerFactory()):
+        self.manager = manager_factory()
 
-    def start(self, start_date: Tuple[int, int, int], end_date: Tuple[int, int, int], batch_size=DEFAULT_BATCH_SIZE):
-        self._controller(start_date, end_date, batch_size)
+    def start(self):
+        self._controller()
 
-    def _controller(self, start_date: Tuple[int, int, int], end_date: Tuple[int, int, int], batch_size: int):
-        self.source_reader.initialize(start_date, end_date, batch_size)
-        header = Header()
-        filing_batch = self.source_reader.next_batch()
+    def _controller(self):
+        self.manager.run()
+        self.manager.print_stats()
 
-        while filing_batch is not None:
-            for source in filing_batch:
-                url = f"{FILINGS_URL}{source.url_path}"
-                request = Request(header=header, url=url)
-                response = self.downloader.download(request, max_retries=3)
-
-                if response.status != 200:
-                    continue
-
-                filing = self.table_reader.read(response.data)
-                self.writer.write(filing)
-"""
 
 if __name__ == '__main__':
-    filing_period = filing_quarter(2022, 1)
-    index_scraper = IndexScraper(period=filing_period)
-    index_scraper.start()
-
+    ts = TableScraper()
+    ts.start()
