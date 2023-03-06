@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from .downloaders import Downloader
-
 
 class IndexFileReader(ABC):
     index_type: str
@@ -28,6 +26,7 @@ class IndexFileManager(ABC):
             raise Exception()
         cls.index_type = index_type
 
+        # set default factories
         for factory_type in ['downloader_factory', 'reader_factory', 'writer_factory']:
             factory = kwargs.get(factory_type)
             if factory is None:
@@ -58,6 +57,6 @@ class IndexFileManager(ABC):
     def successful(self) -> int:
         return self._count - self.failed
 
-    #@property
-    #def source(self):
-     #   return self._source
+    # @property
+    # def source(self):
+    #   return self._source
