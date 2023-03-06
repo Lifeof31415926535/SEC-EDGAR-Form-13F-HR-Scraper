@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -8,3 +8,4 @@ class FormIndexData:
     date_filed: str
     cik: int
     file_name: str
+    id: str = field(default=None)
