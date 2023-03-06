@@ -28,7 +28,7 @@ class TableCreator:
 
     def create_all(self):
         if self.connected:
-            self.create_sources()
+            self.create_source()
             self.create_filing()
             self.create_filing_info()
 
@@ -43,9 +43,10 @@ class TableCreator:
              CREATE TABLE source (
              id UUID PRIMARY KEY NOT NULL,
              company_name VARCHAR(127) NOT NULL,
-             date_filed CHAR(8) NOT NULL,
+             filing_date DATE NOT NULL,
              cik INT NOT NULL,
-             file_name VARCHAR(255) NOT NULL
+             file_name VARCHAR(255) NOT NULL,
+             CONSTRAINT u_index UNIQUE(filing_date, file_name)
              ); 
             """
         )
