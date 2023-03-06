@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from db import connection_manager
 from src.data.index_data import FormIndexData
+from periods import GenericFilingDate
 from downloaders import DownloaderFactory
 from http_modules import Header, Request
 
@@ -62,17 +63,23 @@ class FormsIndexWriter(IndexWriter, ABC):
 
 
 class PostrgresFormIndexWriter(IndexWriter):
+
+    def _format_date(self, date_str):
+        return '-'.join([date_str[0:4], date_str[4:6], date_str[6:8]])
+
     def write(self, sources: list[FormIndexData]):
         manager = connection_manager()
         with manager:
             for source in sources:
+                filing_date = self._format_date(source.date_filed)
+
                 insert_query = sql.SQL(
-                    """INSERT INTO source (id, company_name, date_filed, cik, file_name)
-                            VALUES ({}, {}, {}, {}, {})"""
+                    """INSERT INTO source (id, company_name, filing_date, cik, file_name)
+                            VALUES ({}, {}, {}, {}, {});"""
                 ).format(
                     sql.Literal(uuid4().hex),
                     sql.Literal(source.company_name),
-                    sql.Literal(source.date_filed),
+                    sql.Literal(filing_date),
                     sql.Literal(source.cik),
                     sql.Literal(source.file_name)
                 )
