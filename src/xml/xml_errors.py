@@ -1,7 +1,11 @@
 """Custom Error classes for the XML parser"""
 
 
-class NilEntryError(Exception):
+class XMLParserError(Exception):
+    pass
+
+
+class NilEntryError(XMLParserError):
     """Raised whenever an XML table contains a NIL value."""
 
     def __init__(self, tag: str, message=''):
@@ -17,7 +21,7 @@ class NilEntryError(Exception):
         return f"NilEntryError for tag {self.tag}:  {self.message}."
 
 
-class EmptyEntryError(Exception):
+class EmptyEntryError(XMLParserError):
     """Raised whenever an XML table contains an empty entry."""
 
     def __init__(self, tag: str, message=''):
